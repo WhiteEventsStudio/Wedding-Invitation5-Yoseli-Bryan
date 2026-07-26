@@ -623,20 +623,71 @@
         let opcionSeleccionada = "";
 
         function startInvitation() {
-            const welcomeScreen = document.getElementById('welcome-screen');
-            welcomeScreen.style.opacity = '0';
-            setTimeout(() => {
-                welcomeScreen.style.display = 'none';
-            }, 1000);
+            try {
+                const welcomeScreen = document.getElementById('welcome-screen');
+                if (welcomeScreen) {
+                    welcomeScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        welcomeScreen.style.display = 'none';
+                    }, 1000);
+                }
 
-            if (music) {
-                music.play().catch(e => console.log("Audio play prevented:", e));
-                document.getElementById('music-player').style.display = 'flex';
+                if (music) {
+                    const playPromise = music.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(e => console.log("Audio play prevented:", e));
+                    }
+                    const playerEl = document.getElementById('music-player');
+                    if (playerEl) playerEl.style.display = 'flex';
+                }
+
+                const dateEl = document.getElementById('animated-date');
+                if (dateEl) dateEl.classList.add('start-typing');
+            } catch (err) {
+                console.log("Error al abrir la invitación:", err);
+                // Aunque falle la música o la animación, la pantalla de bienvenida se oculta igual
+                const welcomeScreen = document.getElementById('welcome-screen');
+                if (welcomeScreen) welcomeScreen.style.display = 'none';
+            }
+        }
+
+        // ===================== CUENTA REGRESIVA =====================
+        // Fecha y hora exacta de la boda: 28 de Agosto de 2026, 7:00 PM
+        const weddingDate = new Date("2026-08-28T19:00:00").getTime();
+        let countdownInterval;
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+
+            if (distance <= 0) {
+                if (daysEl) daysEl.textContent = "00";
+                if (hoursEl) hoursEl.textContent = "00";
+                if (minutesEl) minutesEl.textContent = "00";
+                if (secondsEl) secondsEl.textContent = "00";
+                clearInterval(countdownInterval);
+                return;
             }
 
-            const dateEl = document.getElementById('animated-date');
-            if (dateEl) dateEl.classList.add('start-typing');
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+            if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+            if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+            if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
         }
+
+        // Se calcula una vez de inmediato (para no esperar 1 segundo) y luego cada segundo
+        updateCountdown();
+        countdownInterval = setInterval(updateCountdown, 1000);
 
         function toggleMusic() {
             if (music.paused) {
