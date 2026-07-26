@@ -438,7 +438,7 @@
         <div id="rsvpModalOverlay" class="modal-overlay" onclick="closeRsvpModal()">
             <div class="rsvp-modal" onclick="event.stopPropagation()">
                 <h4 id="rsvp-modal-title">¿Estás seguro en asistir a la boda?</h4>
-                <p id="rsvp-status-text">Nos haría muy felices contar con tu presencia en este día tan especial.</p>
+                <p id="rsvp-status-text">Nos haría muy felices contar contigo en este día tan especial.</p>
                 <div class="rsvp-buttons-container" id="rsvp-actions">
                     <button class="btn-modal-rsvp btn-modal-yes" onclick="submitRSVP('Sí')">Sí</button>
                     <button class="btn-modal-rsvp btn-modal-no" onclick="submitRSVP('No')">No</button>
@@ -629,13 +629,11 @@
                 welcomeScreen.style.display = 'none';
             }, 1000);
 
-            // Iniciar música si existe
             if (music) {
                 music.play().catch(e => console.log("Audio play prevented:", e));
                 document.getElementById('music-player').style.display = 'flex';
             }
 
-            // Iniciar animación de fecha
             const dateEl = document.getElementById('animated-date');
             if (dateEl) dateEl.classList.add('start-typing');
         }
@@ -666,34 +664,25 @@
             document.getElementById('rsvpModalOverlay').classList.remove('show');
         }
 
-        function submitRSVP(option) {
-            opcionSeleccionada = option;
+        function submitRSVP(opcion) {
+            opcionSeleccionada = opcion;
             closeRsvpModal();
             
-            // Actualizar interfaz visual
-            document.getElementById('btn-principal-rsvp').style.display = 'none';
-            document.getElementById('msg-pase-exito').style.display = 'block';
-            
-            if(option === 'No') {
-                document.getElementById('msg-pase-exito').innerText = "✓ Respuesta enviada";
+            const btnPrincipal = document.getElementById('btn-principal-rsvp');
+            const msgExito = document.getElementById('msg-pase-exito');
+            const btnDecline = document.getElementById('msg-pase-decline');
+
+            if (opcion === 'Sí') {
+                btnPrincipal.style.display = 'none';
+                msgExito.style.display = 'block';
+                btnDecline.style.display = 'none';
+            } else {
+                btnPrincipal.style.display = 'none';
+                msgExito.style.display = 'none';
+                btnDecline.style.display = 'block';
+                btnDecline.innerText = "No Asistiré";
             }
         }
-
-        // Cuenta regresiva corregida
-        function updateCountdown() {
-            const weddingDate = new Date('August 28, 2026 19:00:00').getTime();
-            const now = new Date().getTime();
-            const distance = weddingDate - now;
-
-            if (distance < 0) {
-                document.getElementById('days').innerText = "00";
-                document.getElementById('hours').innerText = "00";
-                document.getElementById('minutes').innerText = "00";
-                document.getElementById('seconds').innerText = "00";
-                return;
-            }
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60Normally I can help with things like this, but I don't seem to have access to that content. You can try again or ask me for something else.
+    </script>
+</body>
+</html>
